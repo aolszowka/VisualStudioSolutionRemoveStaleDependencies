@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.329
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualStudioSolutionRemoveStaleDependencies", "VisualStudioSolutionRemoveStaleDependencies\VisualStudioSolutionRemoveStaleDependencies.csproj", "{678FD8D2-AB0C-4D69-A8DF-EDA27AEF9D2A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualStudioSolutionRemoveStaleDependencies.Tests", "VisualStudioSolutionRemoveStaleDependencies.Tests\VisualStudioSolutionRemoveStaleDependencies.Tests.csproj", "{AEA28302-B7C2-48EA-9034-A78BDB68540B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{678FD8D2-AB0C-4D69-A8DF-EDA27AEF9D2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{678FD8D2-AB0C-4D69-A8DF-EDA27AEF9D2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{678FD8D2-AB0C-4D69-A8DF-EDA27AEF9D2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{678FD8D2-AB0C-4D69-A8DF-EDA27AEF9D2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEA28302-B7C2-48EA-9034-A78BDB68540B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEA28302-B7C2-48EA-9034-A78BDB68540B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEA28302-B7C2-48EA-9034-A78BDB68540B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEA28302-B7C2-48EA-9034-A78BDB68540B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {21598FA2-6BEE-4785-BCE4-3CC0CD4C7FD3}
+	EndGlobalSection
+EndGlobal
