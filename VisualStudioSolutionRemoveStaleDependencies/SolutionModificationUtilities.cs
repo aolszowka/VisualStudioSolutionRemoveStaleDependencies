@@ -13,6 +13,17 @@ namespace VisualStudioSolutionRemoveStaleDependencies
 
     internal static class SolutionModificationUtilities
     {
+        /// <summary>
+        /// Removes Projects from the target solution file.
+        /// </summary>
+        /// <param name="targetSolution">The solution file to modify.</param>
+        /// <param name="projectsToRemove">The fully qualified path to the projects to remove.</param>
+        /// <remarks>
+        /// This works by extracting the GUID From the target project files;
+        /// if the projects have already been deleted then you must use
+        /// <see cref="RemoveProjectsByGuidFromSolution(string, string[])"/>
+        /// and extract the guids some other way.
+        /// </remarks>
         internal static void RemoveProjectsFromSolution( string targetSolution, IEnumerable<string> projectsToRemove )
         {
             if(projectsToRemove.Any())
@@ -20,7 +31,21 @@ namespace VisualStudioSolutionRemoveStaleDependencies
                 // For Each Project Grab the ProjectGuid
                 string[] guidsOfProjectsToRemove = projectsToRemove.Select(projectToRemove => MSBuildUtilities.GetMSBuildProjectGuid(projectToRemove)).ToArray();
 
-                // Now Open the file for reading
+                RemoveProjectsByGuidFromSolution(targetSolution, guidsOfProjectsToRemove);
+            }
+        }
+
+        /// <summary>
+        /// Removes Projects By Guid From a Solution File
+        /// </summary>
+        /// <param name="targetSolution">The solution file to modify.</param>
+        /// <param name="guidsOfProjectsToRemove">The Guids to remove.</param>
+        /// <remarks><paramref name="guidsOfProjectsToRemove"/> is enumerated several times and for performance reasons is an array.</remarks>
+        internal static void RemoveProjectsByGuidFromSolution( string targetSolution, string[] guidsOfProjectsToRemove )
+        {
+            if(guidsOfProjectsToRemove != null && guidsOfProjectsToRemove.Any())
+            {
+                // Open the file for reading
                 IEnumerable<string> existingSolutionLines = File.ReadLines(targetSolution);
 
                 // We are going to write the changes to a temporary file

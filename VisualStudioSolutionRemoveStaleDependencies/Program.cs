@@ -18,7 +18,29 @@ namespace VisualStudioSolutionRemoveStaleDependencies
         static void Main( string[] args )
         {
             string targetDirectory = @"";
+            RemoveMissingDependenciesFromSolutions(targetDirectory);
             ModifyStaleSolutions(targetDirectory);
+        }
+
+        static void RemoveMissingDependenciesFromSolutions( string targetDirectory )
+        {
+            IEnumerable<string> slnsInDirectory = Directory.EnumerateFiles(targetDirectory, "*.sln", SearchOption.AllDirectories);
+            ConcurrentDictionary<string, string> missingGuidLookup = new ConcurrentDictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+
+            //Parallel.ForEach(slnsInDirectory, slnFile =>
+            foreach(string slnFile in slnsInDirectory)
+            {
+                string[] staleProjects = StaleDependencies.IdentifyMissingDependencies(slnFile).ToArray();
+
+                if(staleProjects.Any())
+                {
+                    // Because the dependency is missing we must parse the project for the project Guid
+                    string[] guidsToRemove = StaleDependencies.GetGuidsForProjects(slnFile, staleProjects, missingGuidLookup).ToArray();
+                    Console.WriteLine($"Modifying {slnFile}");
+                    SolutionModificationUtilities.RemoveProjectsByGuidFromSolution(slnFile, guidsToRemove);
+                }
+            }
+            //);
         }
 
         static void ModifyStaleSolutions( string targetDirectory )

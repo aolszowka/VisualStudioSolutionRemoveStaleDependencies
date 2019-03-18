@@ -53,17 +53,28 @@ namespace VisualStudioSolutionRemoveStaleDependencies
             return TryGetDepedenciesFolderGuid(solution, out dependenciesFolderGuid);
         }
 
-        internal static IEnumerable<string> GetProjectsFromSolution( string targetSolution )
+        /// <summary>
+        /// Get an <see cref="IEnumerable{T}"/> of the path of all of the referenced projects.
+        /// </summary>
+        /// <param name="targetSolution">The solution to evaluate.</param>
+        /// <returns>An <see cref="IEnumerable{T}"/> of the fully qualified path of all of the referenced projects.</returns>
+        internal static IEnumerable<string> GetProjectsFromSolutionFullPath( string targetSolution )
+        {
+            string solutionFolder = Path.GetDirectoryName(targetSolution);
+
+            return GetProjectsFromSolutionRelative(targetSolution)
+            .Select(projectRelativePath => PathUtilities.ResolveRelativePath(solutionFolder, projectRelativePath));
+        }
+
+        internal static IEnumerable<string> GetProjectsFromSolutionRelative( string targetSolution )
         {
             SolutionFile solution = SolutionFile.Parse(targetSolution);
-            string solutionFolder = Path.GetDirectoryName(targetSolution);
 
             return
                 solution
                 .ProjectsInOrder
                 .Where(project => project.ProjectType != SolutionProjectType.SolutionFolder)
-                .Select(project => project.RelativePath)
-                .Select(projectRelativePath => PathUtilities.ResolveRelativePath(solutionFolder, projectRelativePath));
+                .Select(project => project.RelativePath);
         }
 
         internal static IEnumerable<string> GetDependenciesProjects( string targetSolution )
@@ -77,7 +88,7 @@ namespace VisualStudioSolutionRemoveStaleDependencies
             {
                 IEnumerable<string> dependenciesProjectsGuids = GetNestedProjectsForGuid(targetSolution, dependenciesFolderGuid);
 
-                foreach(var dependenciesProjectGuid in dependenciesProjectsGuids)
+                foreach(string dependenciesProjectGuid in dependenciesProjectsGuids)
                 {
                     string relativePathToProject = solution.ProjectsByGuid[dependenciesProjectGuid].RelativePath;
                     yield return PathUtilities.ResolveRelativePath(solutionFolder, relativePathToProject);
